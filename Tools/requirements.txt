@@ -1,0 +1,3 @@
+# ASHFALL asset-pipeline Python dependencies (stdlib-first; these are optional
+# accelerants used by the M2 fetchers). Install with:  pip install -r Tools/requirements.txt
+requests>=2.31
