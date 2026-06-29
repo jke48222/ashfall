@@ -1,8 +1,25 @@
 // ASHFALL — UAshfallTemporalLibrary implementation.
 #include "AshfallTemporalLibrary.h"
 #include "TemporalSubsystem.h"
+#include "AshfallObjectiveSubsystem.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
+
+namespace
+{
+	UAshfallObjectiveSubsystem* GetObjectives(const UObject* WorldContextObject)
+	{
+		if (!GEngine || !WorldContextObject)
+		{
+			return nullptr;
+		}
+		if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			return World->GetSubsystem<UAshfallObjectiveSubsystem>();
+		}
+		return nullptr;
+	}
+}
 
 UTemporalSubsystem* UAshfallTemporalLibrary::GetTemporalSubsystem(const UObject* WorldContextObject)
 {
@@ -59,4 +76,30 @@ bool UAshfallTemporalLibrary::HasCausalFlag(const UObject* WorldContextObject, F
 		return Subsystem->HasCausalFlag(Flag);
 	}
 	return false;
+}
+
+void UAshfallTemporalLibrary::SaveCitizen(const UObject* WorldContextObject)
+{
+	if (UAshfallObjectiveSubsystem* Obj = GetObjectives(WorldContextObject))
+	{
+		Obj->SaveCitizen();
+	}
+}
+
+int32 UAshfallTemporalLibrary::GetCitizensSaved(const UObject* WorldContextObject)
+{
+	const UAshfallObjectiveSubsystem* Obj = GetObjectives(WorldContextObject);
+	return Obj ? Obj->GetCitizensSaved() : 0;
+}
+
+int32 UAshfallTemporalLibrary::GetCitizensTotal(const UObject* WorldContextObject)
+{
+	const UAshfallObjectiveSubsystem* Obj = GetObjectives(WorldContextObject);
+	return Obj ? Obj->GetCitizensTotal() : 0;
+}
+
+bool UAshfallTemporalLibrary::IsObjectiveWon(const UObject* WorldContextObject)
+{
+	const UAshfallObjectiveSubsystem* Obj = GetObjectives(WorldContextObject);
+	return Obj && Obj->GetState() == EObjectiveState::Won;
 }

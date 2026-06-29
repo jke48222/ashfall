@@ -34,4 +34,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Ashfall|Temporal|Causality", meta = (WorldContext = "WorldContextObject"))
 	static bool HasCausalFlag(const UObject* WorldContextObject, FName Flag);
+
+	// --- Objective (slice win condition) -----------------------------------
+
+	UFUNCTION(BlueprintCallable, Category = "Ashfall|Objective", meta = (WorldContext = "WorldContextObject"))
+	static void SaveCitizen(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category = "Ashfall|Objective", meta = (WorldContext = "WorldContextObject"))
+	static int32 GetCitizensSaved(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category = "Ashfall|Objective", meta = (WorldContext = "WorldContextObject"))
+	static int32 GetCitizensTotal(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category = "Ashfall|Objective", meta = (WorldContext = "WorldContextObject"))
+	static bool IsObjectiveWon(const UObject* WorldContextObject);
 };

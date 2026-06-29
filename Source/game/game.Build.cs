@@ -43,6 +43,8 @@ public class game : ModuleRules
 			"game/Ashfall/Core",
 			"game/Ashfall/Player",
 			"game/Ashfall/Temporal",
+			"game/Ashfall/Interaction",
+			"game/Ashfall/Puzzle",
 			"game/Ashfall/Config"
 		});
 
