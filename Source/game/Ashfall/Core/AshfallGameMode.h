@@ -12,4 +12,13 @@ class AAshfallGameMode : public AgameGameMode
 
 public:
 	AAshfallGameMode();
+
+protected:
+	virtual void BeginPlay() override;
+
+	/** Auto-capture sequence (Zenith shot -> toggle -> Fall shot -> quit), driven
+	 *  by the `-AshfallAutoShot` command-line flag for headless milestone renders. */
+	void AutoShotStep();
+
+	int32 AutoShotIndex = 0;
 };
