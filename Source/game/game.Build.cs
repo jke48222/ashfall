@@ -18,7 +18,8 @@ public class game : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
+			"Slate",
+			"DeveloperSettings"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
@@ -37,7 +38,12 @@ public class game : ModuleRules
 			"game/Variant_SideScrolling/AI",
 			"game/Variant_SideScrolling/Gameplay",
 			"game/Variant_SideScrolling/Interfaces",
-			"game/Variant_SideScrolling/UI"
+			"game/Variant_SideScrolling/UI",
+			"game/Ashfall",
+			"game/Ashfall/Core",
+			"game/Ashfall/Player",
+			"game/Ashfall/Temporal",
+			"game/Ashfall/Config"
 		});
 
 		// Uncomment if you are using Slate UI
