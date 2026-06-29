@@ -50,12 +50,21 @@ is **CC-BY 4.0**; the credits below must ship with the game.
 ## Self-generated (AI) assets
 | Asset | Generator | Notes |
 |---|---|---|
-| _none yet_ | Meshy.ai / ModelsLab / HF / ElevenLabs / Tunee | added in the M5 art/FX/audio pass |
+| `Audio/VO/VO_intro_chronomason` | ElevenLabs (voice "Adam") | original narration, `eleven_multilingual_v2` |
+| `Audio/VO/VO_guide_lucilla` | ElevenLabs | original narration |
+| `Audio/VO/VO_objective_first` | ElevenLabs | original narration |
 
-## Audio
-| Asset | Source | License |
+## Audio — Freesound (CC0, no attribution required; recorded for provenance)
+| Asset | Source clip | Author |
 |---|---|---|
-| _pending M2_ | Freesound (CC0/CC-BY filtered) · ElevenLabs (VO) · Tunee (score) | per-item below |
+| `Audio/SFX/SFX_amb_crowd_market` | "Crowded market square in Valencia" | jdpietrzak |
+| `Audio/SFX/SFX_amb_water_fountain` | "Fountain Trickle" | aco363 |
+| `Audio/SFX/SFX_fall_fire_crackle` | "Stove door open, interior ambience" | peridactyloptrix |
+| `Audio/SFX/SFX_fall_rumble_quake` | "Digging" | prozaciswack |
+| `Audio/SFX/SFX_fall_ash_wind` | "Alien jungle" | szegvari |
+| `Audio/SFX/SFX_stinger_whoosh` | "Transition (hit and whoosh)" | xkeril |
+
+> Freesound clips are CC0 HQ-mp3 previews, transcoded to WAV for UE import.
 
 > Each fetcher writes a per-download manifest (author, URL, license, date) into
 > `Tools/Incoming/<source>/manifest.json`; this table is reconciled from those manifests.

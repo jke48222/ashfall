@@ -296,7 +296,12 @@ statue = largest_mesh(f"{PROPS_ROOT}/statue")
 amphora = largest_mesh(f"{PROPS_ROOT}/amphora")
 vessel = largest_mesh(f"{PROPS_ROOT}/vessel")
 if fountain:
-    place_static(fountain, (0, 0, 5), (1, 1, 1), label="Fountain")
+    fact = place_static(fountain, (0, 0, 5), (1, 1, 1), label="Fountain")
+    # The photoscan glTF imports as chrome/metallic — override with stone.
+    if fact and mat_concrete:
+        fsmc = fact.static_mesh_component if hasattr(fact, "static_mesh_component") else fact.get_editor_property("static_mesh_component")
+        for i in range(fsmc.get_num_materials()):
+            fsmc.set_material(i, mat_concrete)
 if statue:
     place_static(CUBE, (0, 700, 75), (1.6, 1.6, 1.5), material=mat_marble, label="StatuePlinth")
     place_static(statue, (0, 700, 150), (1, 1, 1), label="Statue")
@@ -326,20 +331,62 @@ def spawn(cls, loc, r=None, label=None):
     return a
 
 
+def tryset(o, p, v):
+    try:
+        o.set_editor_property(p, v)
+    except Exception as e:
+        emit(f"  [skip] {p}: {e}")
+
+
 try:
-    sun = spawn(unreal.DirectionalLight, (0, 0, 1500), rot(pitch=-42, yaw=-50), "Sun")
+    sun = spawn(unreal.DirectionalLight, (0, 0, 1500),
+                unreal.Rotator(pitch=-38.0, yaw=-55.0, roll=0.0), "Sun")
     sc = sun.get_editor_property("directional_light_component")
-    sc.set_editor_property("intensity", 6.0)
-    sc.set_editor_property("light_color", unreal.Color(255, 236, 210))
-    sc.set_editor_property("atmosphere_sun_light", True)
+    tryset(sc, "intensity", 9.0)                       # strong warm afternoon sun
+    tryset(sc, "light_color", unreal.Color(255, 246, 230))
+    tryset(sc, "atmosphere_sun_light", True)
+    tryset(sc, "light_source_angle", 0.7)
     spawn(unreal.SkyAtmosphere, (0, 0, 0), label="SkyAtmosphere")
     sky = spawn(unreal.SkyLight, (0, 0, 1200), label="SkyLight")
-    sky.get_editor_property("light_component").set_editor_property("real_time_capture", True)
-    spawn(unreal.ExponentialHeightFog, (0, 0, 200), label="HeightFog")
+    skc = sky.get_editor_property("light_component")
+    tryset(skc, "real_time_capture", True)
+    tryset(skc, "intensity", 0.7)                      # calmer sky so blue stops dominating
+    fog = spawn(unreal.ExponentialHeightFog, (0, 0, 200), label="HeightFog")
+    tryset(fog.get_editor_property("component"), "fog_density", 0.018)
     ppv = spawn(unreal.PostProcessVolume, (0, 0, 300), label="GlobalPP")
-    ppv.set_editor_property("unbound", True)
+    tryset(ppv, "unbound", True)
+    s = ppv.get_editor_property("settings")            # Zenith editor-view grade
+    tryset(s, "override_auto_exposure_min_brightness", True)
+    tryset(s, "auto_exposure_min_brightness", 0.6)
+    tryset(s, "override_auto_exposure_max_brightness", True)
+    tryset(s, "auto_exposure_max_brightness", 1.6)
+    tryset(s, "override_auto_exposure_bias", True)
+    tryset(s, "auto_exposure_bias", -0.25)
+    tryset(s, "override_bloom_intensity", True)
+    tryset(s, "bloom_intensity", 0.5)
+    ppv.set_editor_property("settings", s)
 except Exception as ex:
     emit(f"[level] lighting partial: {ex}")
+
+# Temporal lighting director — blends the whole scene Zenith<->Fall on toggle.
+try:
+    eas.spawn_actor_from_class(unreal.TemporalLightingDirector, vec(0, 0, 50)).set_actor_label("LightingDirector")
+    emit("[level] placed TemporalLightingDirector")
+except Exception as ex:
+    emit(f"[level] director skip: {ex}")
+
+# Ambient audio beds (auto-play, looping waves imported by import_audio.py).
+try:
+    crowd = load("/Game/Ashfall/Audio/SFX/SFX_amb_crowd_market")
+    water = load("/Game/Ashfall/Audio/SFX/SFX_amb_water_fountain")
+    for snd, loc, lbl in ((crowd, (0, 0, 200), "Amb_Crowd"), (water, (0, 0, 80), "Amb_Water")):
+        if snd:
+            amb = eas.spawn_actor_from_class(unreal.AmbientSound, vec(*loc))
+            amb.set_actor_label(lbl)
+            amb.get_editor_property("audio_component").set_sound(snd)
+    emit("[level] placed ambient sound beds")
+except Exception as ex:
+    emit(f"[level] ambient audio skip: {ex}")
 
 # ----------------------------------------------------------------------------
 # 5) Player start, nav, game mode, save
