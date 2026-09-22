@@ -1,5 +1,7 @@
 # Ashfall
 
+![License](https://img.shields.io/badge/license-all%20rights%20reserved-lightgrey) ![Top language](https://img.shields.io/github/languages/top/jke48222/ashfall) ![engine](https://img.shields.io/badge/engine-Unreal%20Engine-black) ![status](https://img.shields.io/badge/status-framework%2C%20never%20played-yellow)
+
 A framework for a time-travel puzzle game set in Pompeii on the day Vesuvius erupts. You play a
 Chronomason, someone who can flip the same city block between two moments: **Zenith**, the living
 city at golden noon, and **Fall**, the eruption itself, with ash in the air, fire in the courtyard,
