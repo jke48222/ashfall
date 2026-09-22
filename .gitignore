@@ -30,7 +30,6 @@ Build/
 
 # ---- OS / agent local config -----------------------------------------------
 .DS_Store
-.claude/
 
 # ---- Third-party plugins (installed externally — see README "Required
 #      external plugins". VibeUE ships its own git repo and FAB distribution
